@@ -1,6 +1,6 @@
 import { FC, memo } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { useDispatch } from '../../services/store';
+import { useAppDispatch } from '../../services/store';
 import { addBun, addIngredient } from '../../services/slices/constructorSlice';
 import { setCurrentIngredient } from '../../services/slices/modalSlice';
 import { BurgerIngredientUI } from '@ui';
@@ -9,7 +9,7 @@ import { v4 as uuidv4 } from 'uuid';
 
 export const BurgerIngredient: FC<TBurgerIngredientProps> = memo(
   ({ ingredient, count }) => {
-    const dispatch = useDispatch();
+    const dispatch = useAppDispatch();
     const location = useLocation();
     const navigate = useNavigate();
 

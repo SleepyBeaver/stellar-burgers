@@ -5,7 +5,6 @@ import {
   useLocation,
   useNavigate
 } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
 import { ConstructorPage } from '@pages';
 import {
   Login,
@@ -23,12 +22,19 @@ import styles from './app.module.css';
 import { AppHeader } from '@components';
 import { useEffect } from 'react';
 import { clearCurrentIngredient } from '../../services/slices/modalSlice';
+import { fetchIngredients } from '../../services/slices/ingredientsSlice';
+import { useAppDispatch } from '../../services/store'; // Измененный импорт
 
 export const App = () => {
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch(); // Используем типизированный хук
   const location = useLocation();
   const navigate = useNavigate();
   const background = location.state?.background;
+
+  // Загрузка ингредиентов при старте приложения
+  useEffect(() => {
+    dispatch(fetchIngredients());
+  }, [dispatch]);
 
   const closeModal = () => {
     dispatch(clearCurrentIngredient());

@@ -1,14 +1,16 @@
 import { useState, useRef, useEffect, FC } from 'react';
 import { useInView } from 'react-intersection-observer';
-import { useSelector, useDispatch } from '../../services/store';
+import { useAppSelector, useAppDispatch } from '../../services/store';
 import { TTabMode } from '@utils-types';
 import { BurgerIngredientsUI } from '../ui/burger-ingredients';
 import { fetchIngredients } from '../../services/slices/ingredientsSlice';
 import { Preloader } from '../ui/preloader';
 
 export const BurgerIngredients: FC = () => {
-  const dispatch = useDispatch();
-  const { items, loading, error } = useSelector((state) => state.ingredients);
+  const dispatch = useAppDispatch();
+  const { items, loading, error } = useAppSelector(
+    (state) => state.ingredients
+  );
 
   const [currentTab, setCurrentTab] = useState<TTabMode>('bun');
   const titleBunRef = useRef<HTMLHeadingElement>(null);

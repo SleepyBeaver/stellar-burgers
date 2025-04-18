@@ -1,13 +1,17 @@
 import { FC, useMemo } from 'react';
-import { useSelector, useDispatch } from '../../services/store';
+import { useAppSelector, useAppDispatch } from '../../services/store';
 import { BurgerConstructorUI } from '@ui';
 import { createOrder } from '../../services/slices/ordersSlice';
 import { clearConstructor } from '../../services/slices/constructorSlice';
 
 export const BurgerConstructor: FC = () => {
-  const dispatch = useDispatch();
-  const { bun, ingredients } = useSelector((state) => state.burgerConstructor);
-  const { orderRequest, orderModalData } = useSelector((state) => state.orders);
+  const dispatch = useAppDispatch();
+  const { bun, ingredients } = useAppSelector(
+    (state) => state.burgerConstructor
+  );
+  const { orderRequest, orderModalData } = useAppSelector(
+    (state) => state.orders
+  );
 
   const onOrderClick = () => {
     if (!bun || orderRequest) return;
