@@ -1,20 +1,29 @@
 import { FC, useMemo } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useAppSelector, useAppDispatch } from '../../services/store';
 import { BurgerConstructorUI } from '@ui';
-import { createOrder } from '../../services/slices/ordersSlice';
+import { createOrder, clearOrder } from '../../services/slices/ordersSlice';
 import { clearConstructor } from '../../services/slices/constructorSlice';
 
 export const BurgerConstructor: FC = () => {
   const dispatch = useAppDispatch();
+  const navigate = useNavigate();
   const { bun, ingredients } = useAppSelector(
     (state) => state.burgerConstructor
   );
   const { orderRequest, orderModalData } = useAppSelector(
     (state) => state.orders
   );
+  const user = useAppSelector((state) => state.auth.user);
 
   const onOrderClick = () => {
     if (!bun || orderRequest) return;
+
+    if (!user || !user.email) {
+      navigate('/login');
+      return;
+    }
+
     const ingredientsIds = [
       bun._id,
       ...ingredients.map((item) => item._id),
@@ -24,6 +33,7 @@ export const BurgerConstructor: FC = () => {
   };
 
   const closeOrderModal = () => {
+    dispatch(clearOrder());
     dispatch(clearConstructor());
   };
 

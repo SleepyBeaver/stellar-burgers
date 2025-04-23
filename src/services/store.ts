@@ -14,7 +14,6 @@ const store = configureStore({
 export type RootState = ReturnType<typeof store.getState>;
 export type AppDispatch = typeof store.dispatch;
 
-// Переименовываем хуки для лучшей типобезопасности
 export const useAppDispatch: () => AppDispatch = dispatchHook;
 export const useAppSelector: TypedUseSelectorHook<RootState> = selectorHook;
 

@@ -23,15 +23,19 @@ import { AppHeader } from '@components';
 import { useEffect } from 'react';
 import { clearCurrentIngredient } from '../../services/slices/modalSlice';
 import { fetchIngredients } from '../../services/slices/ingredientsSlice';
-import { useAppDispatch } from '../../services/store'; // Измененный импорт
+import { checkUserAuth } from '../../services/slices/authSlice';
+import { useAppDispatch } from '../../services/store';
 
 export const App = () => {
-  const dispatch = useAppDispatch(); // Используем типизированный хук
+  const dispatch = useAppDispatch();
   const location = useLocation();
   const navigate = useNavigate();
   const background = location.state?.background;
 
-  // Загрузка ингредиентов при старте приложения
+  useEffect(() => {
+    dispatch(checkUserAuth());
+  }, [dispatch]);
+
   useEffect(() => {
     dispatch(fetchIngredients());
   }, [dispatch]);
@@ -80,7 +84,7 @@ export const App = () => {
           <Route
             path='/feed/:number'
             element={
-              <Modal onClose={() => navigate(-1)} title={''}>
+              <Modal onClose={() => navigate(-1)} title={'Детали заказа'}>
                 <OrderInfo />
               </Modal>
             }
@@ -98,6 +102,3 @@ export const App = () => {
     </div>
   );
 };
-function dispatch(arg0: any) {
-  throw new Error('Function not implemented.');
-}

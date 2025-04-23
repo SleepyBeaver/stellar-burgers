@@ -3,13 +3,12 @@ import { FeedUI } from '@ui-pages';
 import { TOrder } from '@utils-types';
 import { FC, useEffect } from 'react';
 import { useAppSelector, useAppDispatch } from '../../services/store';
-import { fetchFeeds } from '../../services/slices/feedSlice'; // Импортируйте экшен
+import { fetchFeeds } from '../../services/slices/feedSlice';
 
 export const Feed: FC = () => {
   const dispatch = useAppDispatch();
   const orders: TOrder[] = useAppSelector((state) => state.feed.orders);
 
-  // Загружаем данные при монтировании компонента
   useEffect(() => {
     dispatch(fetchFeeds());
   }, [dispatch]);
@@ -19,7 +18,7 @@ export const Feed: FC = () => {
   }
 
   const handleRefreshFeeds = () => {
-    dispatch(fetchFeeds()); // Повторный запрос к API
+    dispatch(fetchFeeds());
   };
 
   return <FeedUI orders={orders} handleGetFeeds={handleRefreshFeeds} />;

@@ -21,10 +21,8 @@ const initialState: TFeedState = {
 export const fetchFeeds = createAsyncThunk('feed/get', async () => {
   try {
     const data = await getFeedsApi();
-    console.log('API Response:', data); // Добавить лог
     return data;
   } catch (error) {
-    console.error('API Error:', error); // Логирование ошибки
     throw error;
   }
 });

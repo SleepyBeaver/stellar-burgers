@@ -28,7 +28,7 @@ export const FeedInfo: FC = () => {
     <FeedInfoUI
       readyOrders={readyOrders}
       pendingOrders={pendingOrders}
-      feed={{ total, totalToday }} // Соответствует типу any в feed
+      feed={{ total, totalToday }}
     />
   );
 };
