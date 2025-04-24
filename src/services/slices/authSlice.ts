@@ -92,9 +92,12 @@ export const logout = createAsyncThunk(
   async (_, { rejectWithValue }) => {
     try {
       await logoutApi();
-      localStorage.removeItem('accessToken');
+      localStorage.clear();
+      document.cookie =
+        'accessToken=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
       document.cookie =
         'refreshToken=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
+      return true;
     } catch (error) {
       return rejectWithValue(error);
     }
@@ -111,6 +114,10 @@ export const authSlice = createSlice({
         state.user = action.payload;
         state.isAuthChecked = true;
       })
+      .addCase(checkUserAuth.rejected, (state) => {
+        state.user = null;
+        state.isAuthChecked = true;
+      })
       .addCase(login.fulfilled, (state, action: PayloadAction<TUser>) => {
         state.user = action.payload;
       })
@@ -123,6 +130,8 @@ export const authSlice = createSlice({
       })
       .addCase(logout.fulfilled, (state) => {
         state.user = null;
+        state.isAuthChecked = false;
+        state.isUpdateSuccess = false;
       })
       .addMatcher(
         (action) => action.type.endsWith('/pending'),

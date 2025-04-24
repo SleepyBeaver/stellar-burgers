@@ -1,7 +1,7 @@
 import { FC, useEffect } from 'react';
 import { useAppDispatch, useAppSelector } from '../../services/store';
 import { fetchUserOrders } from '../../services/slices/profileOrdersSlice';
-import { OrdersList } from '@components';
+import { ProfileOrdersUI } from '../../components/ui/pages/profile-orders';
 import { Preloader } from '@ui';
 
 export const ProfileOrders: FC = () => {
@@ -16,5 +16,5 @@ export const ProfileOrders: FC = () => {
     return <Preloader />;
   }
 
-  return <OrdersList orders={orders} />;
+  return <ProfileOrdersUI orders={orders} />;
 };

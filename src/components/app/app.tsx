@@ -25,6 +25,7 @@ import { clearCurrentIngredient } from '../../services/slices/modalSlice';
 import { fetchIngredients } from '../../services/slices/ingredientsSlice';
 import { checkUserAuth } from '../../services/slices/authSlice';
 import { useAppDispatch } from '../../services/store';
+import { ProtectedRoute } from './protected-route';
 
 export const App = () => {
   const dispatch = useAppDispatch();
@@ -32,15 +33,14 @@ export const App = () => {
   const navigate = useNavigate();
   const background = location.state?.background;
 
-  useEffect(() => {
-    dispatch(checkUserAuth());
-  }, [dispatch]);
+  const handleModalClose = () => navigate(-1);
 
   useEffect(() => {
+    dispatch(checkUserAuth());
     dispatch(fetchIngredients());
   }, [dispatch]);
 
-  const closeModal = () => {
+  const closeIngredientModal = () => {
     dispatch(clearCurrentIngredient());
     navigate(background?.pathname || '/', { replace: true });
   };
@@ -59,16 +59,65 @@ export const App = () => {
       <Routes location={background || location}>
         <Route path='/' element={<ConstructorPage />} />
         <Route path='/feed' element={<Feed />} />
-        <Route path='/login' element={<Login />} />
-        <Route path='/register' element={<Register />} />
-        <Route path='/forgot-password' element={<ForgotPassword />} />
-        <Route path='/reset-password' element={<ResetPassword />} />
-        <Route path='/profile' element={<Profile />} />
-        <Route path='/profile/orders' element={<ProfileOrders />} />
         <Route path='/ingredients/:id' element={<IngredientDetails />} />
         <Route path='/feed/:number' element={<OrderInfo />} />
-        <Route path='/profile/orders/:number' element={<OrderInfo />} />
         <Route path='*' element={<NotFound404 />} />
+        <Route
+          path='/login'
+          element={
+            <ProtectedRoute onlyUnAuth>
+              <Login />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path='/register'
+          element={
+            <ProtectedRoute onlyUnAuth>
+              <Register />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path='/forgot-password'
+          element={
+            <ProtectedRoute onlyUnAuth>
+              <ForgotPassword />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path='/reset-password'
+          element={
+            <ProtectedRoute onlyUnAuth>
+              <ResetPassword />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path='/profile'
+          element={
+            <ProtectedRoute>
+              <Profile />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path='/profile/orders'
+          element={
+            <ProtectedRoute>
+              <ProfileOrders />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path='/profile/orders/:number'
+          element={
+            <ProtectedRoute>
+              <OrderInfo />
+            </ProtectedRoute>
+          }
+        />
       </Routes>
 
       {background && (
@@ -76,7 +125,7 @@ export const App = () => {
           <Route
             path='/ingredients/:id'
             element={
-              <Modal onClose={closeModal} title='Детали ингредиента'>
+              <Modal onClose={closeIngredientModal} title='Детали ингредиента'>
                 <IngredientDetails />
               </Modal>
             }
@@ -84,7 +133,7 @@ export const App = () => {
           <Route
             path='/feed/:number'
             element={
-              <Modal onClose={() => navigate(-1)} title={'Детали заказа'}>
+              <Modal onClose={handleModalClose} title={'Детали заказа'}>
                 <OrderInfo />
               </Modal>
             }
@@ -92,7 +141,7 @@ export const App = () => {
           <Route
             path='/profile/orders/:number'
             element={
-              <Modal onClose={() => navigate(-1)} title={''}>
+              <Modal onClose={handleModalClose} title={''}>
                 <OrderInfo />
               </Modal>
             }

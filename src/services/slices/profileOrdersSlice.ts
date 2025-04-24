@@ -14,11 +14,10 @@ const initialState: TProfileOrdersState = {
   error: null
 };
 
-// 🔁 Получение заказов пользователя
 export const fetchUserOrders = createAsyncThunk(
   'profileOrders/fetch',
   async () => {
-    const data = await getOrdersApi(); // из burger-api
+    const data = await getOrdersApi();
     return data;
   }
 );
