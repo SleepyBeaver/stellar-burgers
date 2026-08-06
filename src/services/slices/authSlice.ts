@@ -147,10 +147,20 @@ export const authSlice = createSlice({
           state.isLoading = false;
         }
       )
-      .addMatcher(isRejectedWithValue, (state, action) => {
-        state.isLoading = false;
-        state.error = (action.payload as Error).message || 'Ошибка авторизации';
-      });
+      .addMatcher(
+        (action): action is ReturnType<typeof login.rejected> =>
+          action.type.endsWith('/rejected'),
+        (state, action) => {
+          state.isLoading = false;
+          if (typeof action.payload === 'string') {
+            state.error = action.payload;
+          } else if (action.error?.message) {
+            state.error = action.error.message;
+          } else {
+            state.error = 'Неизвестная ошибка';
+          }
+        }
+      );
   }
 });
 
